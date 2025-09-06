@@ -1,6 +1,6 @@
 // index.js
 import express from 'express';
-import postComments from './src/routes/comment.routes.js';
+import postRoutes from './src/routes/post.route.js';
 
 const app = express();
 const port = 3000;
@@ -8,7 +8,8 @@ const port = 3000;
 app.use(express.json());
 
 // Mount the post routes
-app.use('/comments', postComments);
+app.use('/posts', postRoutes);
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

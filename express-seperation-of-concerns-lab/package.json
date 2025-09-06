@@ -1,13 +1,13 @@
 {
-  "name": "helloworldapi",
+  "name": "express-seperation-of-concerns-lab",
   "version": "1.0.0",
   "description": "My first API",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node in-memory.js",
-    "dev": "nodemon in-memory.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
