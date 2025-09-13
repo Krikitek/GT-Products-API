@@ -1,7 +1,7 @@
 // src/services/post.service.js
 
 let posts = [
-{"id": 1, "name": "Cocoy", "price": 1000},
+{"id": 1, "name": "Cocoy",},
   {"id": 2, "name": "Smartphone", "price": 500},
     {"id": 3, "name": "Tablet", "price": 300}
 ];
