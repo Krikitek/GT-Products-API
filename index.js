@@ -1,7 +1,7 @@
 // index.js
 import express from 'express';
 import postRoutes from './src/routes/post.routes.js';
-import { testConnection } from './src/config/db.js'; // Import the test function co
+import { testConnection } from './src/config/db.js'; // Import the test function c
 
 const app = express();
 const port = 3000;
