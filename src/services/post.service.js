@@ -1,60 +1,94 @@
 // src/services/post.service.js
 import pool from '../config/db.js';
+import { ApiError } from '../utils/ApiError.js';
 
 export const getAllPosts = async () => {
-    const [posts] = await pool.query('SELECT * FROM posts');
-    return posts;
+  const [posts] = await pool.query('SELECT * FROM posts');
+  if (posts.length === 0) {
+    throw new ApiError(404, "No posts found");
+  }
+  return posts;
 };
 
+// ✅ Get single post by ID
 export const getPostById = async (id) => {
-    const [rows] = await pool.query('SELECT * FROM posts WHERE id = ?', [id]);
-    return rows[0] || null;
+  const [rows] = await pool.query('SELECT * FROM posts WHERE id = ?', [id]);
+  if (!rows[0]) {
+    throw new ApiError(404, "Post not found");
+  }
+  return rows[0];
 };
 
+// ✅ Create new post
 export const createPost = async (postData) => {
-    const { title, content } = postData;
-    const [result] = await pool.query(
-        'INSERT INTO posts (title, content) VALUES (?, ?)',
-            [title, content]
-    );
-    const newPostId = result.insertId;
-    return getPostById(newPostId);
+  const { title, content } = postData;
+
+  if (!title || !content) {
+    throw new ApiError(400, "Title and content are required");
+  }
+
+  const [result] = await pool.query(
+    'INSERT INTO posts (title, content) VALUES (?, ?)',
+    [title, content]
+  );
+
+  if (result.affectedRows === 0) {
+    throw new ApiError(500, "Failed to create post");
+  }
+
+  return getPostById(result.insertId);
 };
 
-    export const updatePost = async (id, postData) => {
-        const { title, content } = postData;
-        const [result] = await pool.query(
-            'UPDATE posts SET title = ?, content = ? WHERE id = ?',
-            [title, content, id]
-        );
-        if (result.affectedRows === 0) {
-            return null;
-        }
-        return getPostById(id);
-    };
+// ✅ Update post (replace all fields)
+export const updatePost = async (id, postData) => {
+  const { title, content } = postData;
 
-    export const partiallyUpdatePost = async (id, updates) => {
-        const fields = Object.keys(updates);
-        const values = Object.values(updates);
+  if (!title || !content) {
+    throw new ApiError(400, "Title and content are required");
+  }
 
-        if (fields.length === 0) {
-            return getPostById(id);
-        }
-        
-        const setClause = fields.map(field => `${field} = ?`).join(', ');
-        
-        const [result] = await pool.query(
-            `UPDATE posts SET ${setClause} WHERE id = ?`,
-            [...values, id]
-        );
+  const [result] = await pool.query(
+    'UPDATE posts SET title = ?, content = ? WHERE id = ?',
+    [title, content, id]
+  );
 
-        if (result.affectedRows === 0) {
-            return null;
-        }
-        return getPostById(id);
-    };
+  if (result.affectedRows === 0) {
+    throw new ApiError(404, "Post not found");
+  }
 
-        export const deletePost = async (id) => {
-        const [result] = await pool.query('DELETE FROM posts WHERE id = ?', [id]);
-        return result.affectedRows > 0;
-    };
+  return getPostById(id);
+};
+
+// ✅ Partially update post
+export const partiallyUpdatePost = async (id, updates) => {
+  const fields = Object.keys(updates);
+  const values = Object.values(updates);
+
+  if (fields.length === 0) {
+    return getPostById(id);
+  }
+
+  const setClause = fields.map((field) => `${field} = ?`).join(', ');
+
+  const [result] = await pool.query(
+    `UPDATE posts SET ${setClause} WHERE id = ?`,
+    [...values, id]
+  );
+
+  if (result.affectedRows === 0) {
+    throw new ApiError(404, "Post not found");
+  }
+
+  return getPostById(id);
+};
+
+// ✅ Delete post
+export const deletePost = async (id) => {
+  const [result] = await pool.query('DELETE FROM posts WHERE id = ?', [id]);
+
+  if (result.affectedRows === 0) {
+    throw new ApiError(404, "Post not found");
+  }
+
+  return true;
+};
