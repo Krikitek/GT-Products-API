@@ -7,8 +7,10 @@ import * as postController from '../controllers/post.controller.js'; // ✅ FIXE
 
 const router = Router();
 
-router.post('/', validatePost, postController.createPost);
-router.put('/:id', validatePost, postController.updatePost);//e should create a separate validator for patch later
+router.post("/", validatePost, postController.createPost);
+router.put("/:id", validatePost, postController.updatePost);
+router.get("/", postController.getAllPosts);
+router.get("/:id", postController.getPostById);
+router.delete("/:id", postController.deletePost);
 
-// ... other routes
 export default router;
