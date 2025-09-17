@@ -99,3 +99,45 @@ export const deletePost = async (id) => {
 
   return true;
 };
+
+export async function createComment({ comment, authorId, postId}) {
+  // Check if author exists
+  const author = await db.query("SELECT id FROM users WHERE id = $1", [authorId]);
+  if (author.rows.length === 0) {
+    throw new ApiError(400, "Invalid authorId");
+  }
+
+  // Check if post exists
+  const post = await db.query("SELECT id FROM posts WHERE id = $1", [postId]);
+  if (post.rows.length === 0) {
+    throw new ApiError(400, "Invalid postId");
+  }
+
+  // Insert comment
+  const result = await db.query(
+    `INSERT INTO comments (comment, user_id, postId)
+     VALUES ($1, $2, $3) RETURNING *`,
+    [comment, authorId, postId]
+  );
+
+  return result.rows[0];
+};
+
+export async function getCommentsByPostId(postId) {
+  const result = await db.query(
+    `SELECT c.*, u.username AS author
+     FROM comments c
+     JOIN users u ON c.user_id = u.id
+     WHERE c.postId = $1
+     ORDER BY c.createdAt DESC`,
+    [postId]
+  );
+
+  if (result.rows.length === 0) {
+    throw new ApiError(404, "No comments found for this post");
+  }
+
+  return result.rows;
+};
+
+

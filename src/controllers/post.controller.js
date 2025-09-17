@@ -45,4 +45,26 @@ export const deletePost = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, null, "Post deleted successfully"));
 });
 
+export const addComment = asyncHandler(async (req, res) => {
+  const { comment, authorId, postId } = req.body; // all come from JSON payload
+
+  const comments = await commentService.createComment({ comment, authorId, postId });
+
+  return res
+    .status(201)
+    .json(new ApiResponse(201, comments, "Comment created successfully"));
+});
+
+export const listComments = asyncHandler(async (req, res) => {
+  const { postId } = req.params; // router should use :postId not :id
+
+  const comments = await commentService.getCommentsByPostId(postId);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, comments, "Comments fetched successfully"));
+});
+
+
+
 

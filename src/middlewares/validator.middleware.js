@@ -28,3 +28,30 @@ export const validatePost = [
     next();
   },
 ];
+
+export const validateComment = [
+  // Content must not be empty and is sanitized
+  body("comment")
+    .trim()
+    .notEmpty()
+    .withMessage("Comment content is required."),
+
+  // AuthorId must be a valid integer (>= 1)
+  body("userId")
+    .isInt({ min: 1 })
+    .withMessage("A valid author ID is required."),
+
+  // Optional: if comments belong to a post
+  body("postId")
+    .isInt({ min: 1 })
+    .withMessage("A valid post ID is required."),
+
+  // Validation result handler
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];

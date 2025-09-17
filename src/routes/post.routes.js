@@ -1,6 +1,7 @@
 // src/routes/post.routes.js
 import { Router } from 'express';
 import { validatePost } from '../middlewares/validator.middleware.js';
+import { validateComment } from '../middlewares/validator.middleware.js';
 import * as postController from '../controllers/post.controller.js'; // ✅ FIXED
 
 // ... imports
@@ -12,5 +13,7 @@ router.put("/:id", validatePost, postController.updatePost);
 router.get("/", postController.getAllPosts);
 router.get("/:id", postController.getPostById);
 router.delete("/:id", postController.deletePost);
+router.post("/comments", validateComment, postController.addComment);
+router.get("/:id/comments", postController.listComments);
 
 export default router;
