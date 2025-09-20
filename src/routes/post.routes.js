@@ -2,7 +2,8 @@
 import { Router } from 'express';
 import { validatePost } from '../middlewares/validator.middleware.js';
 import { validateComment } from '../middlewares/validator.middleware.js';
-import * as postController from '../controllers/post.controller.js'; // ✅ FIXED
+import * as postController from '../controllers/post.controller.js'; 
+import * as commentController from '../controllers/comment.controller.js'; 
 
 // ... imports
 
@@ -13,7 +14,7 @@ router.put("/:id", validatePost, postController.updatePost);
 router.get("/", postController.getAllPosts);
 router.get("/:id", postController.getPostById);
 router.delete("/:id", postController.deletePost);
-router.post("/comments", validateComment, postController.addComment);
-router.get("/:id/comments", postController.listComments);
+router.get("/:postId/comments", commentController.getCommentsByPostId);
+router.post("/:postId/comments", validateComment, commentController.createCommentForPost);
 
 export default router;

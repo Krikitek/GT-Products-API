@@ -30,23 +30,16 @@ export const validatePost = [
 ];
 
 export const validateComment = [
-  // Content must not be empty and is sanitized
-  body("comment")
+  body("text")
     .trim()
-    .notEmpty()
-    .withMessage("Comment content is required."),
+    .isLength({ min: 1, max: 500 })
+    .withMessage("Comment must be between 1 and 500 characters."),
 
-  // AuthorId must be a valid integer (>= 1)
-  body("userId")
+  // Only if you're not using authentication for authorId
+  body("authorId")
     .isInt({ min: 1 })
     .withMessage("A valid author ID is required."),
 
-  // Optional: if comments belong to a post
-  body("postId")
-    .isInt({ min: 1 })
-    .withMessage("A valid post ID is required."),
-
-  // Validation result handler
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
