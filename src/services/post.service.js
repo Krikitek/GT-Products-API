@@ -21,24 +21,15 @@ export const getPostById = async (id) => {
 
 // ✅ Create new post (now includes authorId)
 export const createPost = async (postData) => {
-  const { title, content, authorId } = postData;
-
-  if (!title || !content || !authorId) {
-    throw new ApiError(400, "Title, content, and authorId are required");
-  }
-
-  try {
-    const [result] = await pool.query(
-      "INSERT INTO posts (title, content, authorId) VALUES (?, ?, ?)",
-      [title, content, authorId]
-    );
-
-    if (result.affectedRows === 0) {
-      throw new ApiError(500, "Failed to create post");
-    }
-
-    return getPostById(result.insertId);
-  } catch (err) {
+  const { title, content } = postData; // No longer need authorId from here
+    try {
+        const [result] = await pool.query(
+            'INSERT INTO posts (title, content, authorId) VALUES (?, ?, ?)',
+            [title, content, authorId] // Use the authorId from the argument
+        );
+        const newPost = await getPostById(result.insertId);
+        return newPost;
+    } catch (err) {
     if (err.code === "ER_NO_REFERENCED_ROW_2") {
       throw new ApiError(400, "Invalid author ID. User does not exist.");
     }

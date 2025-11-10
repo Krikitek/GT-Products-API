@@ -5,7 +5,7 @@ import { validateRegistration } from '../middlewares/validator.middleware.js';
 
 const router = Router();
 
-// Define the registration endpoint
+router.post('/login', authController.loginUser);
 router.post('/register', validateRegistration, authController.registerUser);
 
 export default router;

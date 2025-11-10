@@ -14,11 +14,6 @@ export const validatePost = [
     .notEmpty()
     .withMessage("Content is required."),
 
-  // AuthorId must be a valid integer (>= 1)
-  body("authorId")
-    .isInt({ min: 1 })
-    .withMessage("A valid author ID is required."),
-
   // Validation result handler
   (req, res, next) => {
     const errors = validationResult(req);
