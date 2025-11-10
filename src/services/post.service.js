@@ -38,23 +38,24 @@ export const createPost = async (postData) => {
 };
 
 // ✅ Update post (replace all fields)
-export const updatePost = async (id, postData) => {
-  const { title, content } = postData;
+export const updatePost = async (id, postData, userId) => { // Add userId as an argument
+    const { title, content } = postData;
 
-  if (!title || !content) {
-    throw new ApiError(400, "Title and content are required");
-  }
+    // First, get the post to check for ownership
+    const post = await getPostById(id); // This will throw a 404 if not found
 
-  const [result] = await pool.query(
-    "UPDATE posts SET title = ?, content = ? WHERE id = ?",
-    [title, content, id]
-  );
+    // AUTHORIZATION CHECK
+    if (post.authorId !== userId) {
+        throw new ApiError(403, "Forbidden: You do not have permission to edit this post.");
+    }
 
-  if (result.affectedRows === 0) {
-    throw new ApiError(404, "Post not found");
-  }
-
-  return getPostById(id);
+    // If the check passes, proceed with the update
+    await pool.query(
+        'UPDATE posts SET title = ?, content = ? WHERE id = ?',
+        [title, content, id]
+    );
+    const updatedPost = await getPostById(id);
+    return updatedPost;
 };
 
 // ✅ Partially update post
@@ -81,13 +82,17 @@ export const partiallyUpdatePost = async (id, updates) => {
 };
 
 // ✅ Delete post
-export const deletePost = async (id) => {
-  const [result] = await pool.query("DELETE FROM posts WHERE id = ?", [id]);
+export const deletePost = async (id, userId) => { // Add userId as an argument
+    // First, get the post to check for ownership
+    const post = await getPostById(id); // This will throw a 404 if not found
 
-  if (result.affectedRows === 0) {
-    throw new ApiError(404, "Post not found");
-  }
-
-  return true;
+    // AUTHORIZATION CHECK
+    if (post.authorId !== userId) {
+        throw new ApiError(403, "Forbidden: You do not have permission to delete this post.");
+    }
+    
+    // If the check passes, proceed with the deletion
+    const [result] = await pool.query('DELETE FROM posts WHERE id = ?', [id]);
+    return result.affectedRows;
 };
 

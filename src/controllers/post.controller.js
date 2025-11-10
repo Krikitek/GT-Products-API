@@ -31,20 +31,21 @@ export const createPost = asyncHandler(async (req, res) => {
 
 // ✅ Update post
 export const updatePost = asyncHandler(async (req, res) => {
-  const postId = parseInt(req.params.id, 10);
-  const updatedPost = await postService.updatePost(postId, req.body);
-  return res
-    .status(200)
-    .json(new ApiResponse(200, updatedPost, "Post updated successfully"));
+    const postId = parseInt(req.params.id, 10);
+    const postData = req.body;
+    const userId = req.user.id; // Get the user ID from the middleware
+
+    const updatedPost = await postService.updatePost(postId, postData, userId);
+    res.status(200).json(new ApiResponse(200, updatedPost, "Post updated successfully"));
 });
 
 // ✅ Delete post
 export const deletePost = asyncHandler(async (req, res) => {
-  const postId = parseInt(req.params.id, 10);
-  await postService.deletePost(postId);
-  return res
-    .status(200)
-    .json(new ApiResponse(200, null, "Post deleted successfully"));
+    const postId = parseInt(req.params.id, 10);
+    const userId = req.user.id; // Get the user ID from the middleware
+
+    await postService.deletePost(postId, userId);
+    res.status(200).json(new ApiResponse(200, null, "Post deleted successfully"));
 });
 
 
