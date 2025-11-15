@@ -11,7 +11,7 @@ export const authMiddleware = asyncHandler(async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
             // Get token from header (e.g., "Bearer <token>")
-            token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTc2MzE4OTUwNSwiZXhwIjoxNzYzMTkzMTA1fQ.BuQFb_nGCl5C4jHLSaKiQ-bffw1p6yVfMqoHTFkTgRU";
+            token = req.headers.authorization.split(' ')[1];
 
             // Verify the token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
