@@ -20,12 +20,12 @@ export const getPostById = async (id) => {
 };
 
 // ✅ Create new post (now includes authorId)
-export const createPost = async (postData) => {
-  const { title, content } = postData; // No longer need authorId from here
+export const createPost = async (postData, authorId) => {
+  const { title, content } = postData;
     try {
         const [result] = await pool.query(
             'INSERT INTO posts (title, content, authorId) VALUES (?, ?, ?)',
-            [title, content, authorId] // Use the authorId from the argument
+            [title, content, authorId]
         );
         const newPost = await getPostById(result.insertId);
         return newPost;
@@ -95,4 +95,3 @@ export const deletePost = async (id, userId) => { // Add userId as an argument
     const [result] = await pool.query('DELETE FROM posts WHERE id = ?', [id]);
     return result.affectedRows;
 };
-

@@ -13,6 +13,17 @@ export const createPhoto = async (photoData) => {
     return rows[0];
 };
 
+// Get all photos with user details (username)
+export const getAllPhotos = async () => {
+    const [photos] = await pool.query(`
+        SELECT photos.*, users.username 
+        FROM photos 
+        JOIN users ON photos.userId = users.id 
+        ORDER BY photos.created_at DESC
+    `);
+    return photos;
+};
+
 export const getPhotosByUserId = async (userId) => {
     const [photos] = await pool.query('SELECT * FROM photos WHERE userId = ?', [userId]);
     return photos;

@@ -19,6 +19,11 @@ export const uploadPhoto = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, newPhoto, "Photo uploaded successfully"));
 });
 
+export const getAllPhotos = asyncHandler(async (req, res) => {
+    const photos = await photoService.getAllPhotos();
+    res.status(200).json(new ApiResponse(200, photos, "All photos retrieved successfully"));
+});
+
 export const getUserPhotos = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const photos = await photoService.getPhotosByUserId(userId);

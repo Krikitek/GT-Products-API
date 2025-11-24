@@ -2,20 +2,20 @@
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 
-dotenv.config(); // Load .env first
+dotenv.config(); // Load .env variables
 
 const pool = mysql.createPool({
-  host: "localhost",
-  port: "3306",
-  user: "root",
-  password: "1234",
-  database: "blogdatabase",
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
 
-// ✅ Test function
+// ✅ Test database connection
 export const testConnection = async () => {
   try {
     const connection = await pool.getConnection();
@@ -27,3 +27,4 @@ export const testConnection = async () => {
 };
 
 export default pool;
+

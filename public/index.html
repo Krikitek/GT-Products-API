@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Clone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Auth Section -->
+        <div id="auth-section" class="auth-container">
+            <div class="auth-box">
+                <h1 class="logo-font">HELLO WORLD</h1>
+                
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form">
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit" class="btn-primary">Log In</button>
+                </form>
+
+                <!-- Register Form (Hidden by default) -->
+                <form id="register-form" class="auth-form hidden">
+                    <input type="text" id="register-username" placeholder="Username" required>
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <input type="password" id="register-password" placeholder="Password" required>
+                    <button type="submit" class="btn-primary">Sign Up</button>
+                </form>
+
+                <div class="separator">
+                    <div class="line"></div>
+                    <div class="or">OR</div>
+                    <div class="line"></div>
+                </div>
+
+                <div class="switch-auth">
+                    <p id="switch-to-register">Don't have an account? <a href="#">Sign up</a></p>
+                    <p id="switch-to-login" class="hidden">Have an account? <a href="#">Log in</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main App Section (Hidden by default) -->
+        <div id="main-app" class="main-container hidden">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h1 class="logo-font">Instagram</h1>
+                <nav>
+                    <a href="#" class="nav-item active"><i class="fas fa-home"></i> <span>Home</span></a>
+                    <a href="#" class="nav-item"><i class="fas fa-search"></i> <span>Search</span></a>
+                    <a href="#" class="nav-item"><i class="far fa-compass"></i> <span>Explore</span></a>
+                    <a href="#" class="nav-item"><i class="far fa-heart"></i> <span>Notifications</span></a>
+                    <a href="#" class="nav-item" id="create-post-btn"><i class="far fa-plus-square"></i><span>Create</span></a>
+                    <a href="#" class="nav-item"><i class="far fa-user-circle"></i> <span>Profile</span></a>
+                    <a href="#" class="nav-item" id="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Log out</span></a>
+                </nav>
+            </div>
+
+            <!-- Feed -->
+            <div class="feed-container">
+                <div class="stories-container">
+                    <!-- Placeholder for stories -->
+                    <div class="story"><div class="story-ring"><div class="story-img"></div></div><span class="username">user1</span></div>
+                    <div class="story"><div class="story-ring"><div class="story-img"></div></div><span class="username">user2</span></div>
+                    <div class="story"><div class="story-ring"><div class="story-img"></div></div><span class="username">user3</span></div>
+                </div>
+                
+                <div id="posts-feed" class="posts-feed">
+                    <!-- Posts will be injected here -->
+                </div>
+            </div>
+
+            <!-- Suggestions Sidebar (Right) -->
+            <div class="suggestions-sidebar">
+                <div class="user-profile-mini">
+                    <div class="profile-pic"></div>
+                    <div class="profile-info">
+                        <span class="username-bold" id="current-username">username</span>
+                        <span class="fullname" id="current-email">Full Name</span>
+                    </div>
+                    <a href="#" class="switch-link">Switch</a>
+                </div>
+                <div class="suggestions-header">
+                    <span>Suggestions For You</span>
+                    <a href="#">See All</a>
+                </div>
+                <!-- Suggestion Items -->
+                <div class="suggestion-item">
+                    <div class="profile-pic-small"></div>
+                    <div class="suggestion-info">
+                        <span class="username-small">suggested_user</span>
+                        <span class="info-text">New to Instagram</span>
+                    </div>
+                    <a href="#" class="follow-link">Follow</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="create-post-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create new post</h3>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-section">
+                    <i class="far fa-images fa-3x"></i>
+                    <p>Drag photos and videos here</p>
+                    <label for="post-image" class="btn-primary-small">Select from computer</label>
+                    <input type="file" id="post-image" accept="image/*" hidden>
+                    <div id="image-preview" class="hidden"></div>
+                </div>
+                <div class="caption-section hidden" id="caption-section">
+                    <div class="mini-user-header">
+                        <div class="profile-pic-tiny"></div>
+                        <span class="username-tiny" id="modal-username">username</span>
+                    </div>
+                    <textarea id="post-caption" placeholder="Write a caption..."></textarea>
+                    <button id="share-post-btn" class="share-btn">Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
